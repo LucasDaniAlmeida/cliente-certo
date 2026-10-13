@@ -49,7 +49,7 @@ export const listUsers = createServerFn({ method: 'GET' }).middleware([requireSu
     users.push(...data.users.map(u => ({ id: u.id, email: u.email ?? '', created_at: u.created_at })));
     if (data.users.length < 1000) break;
   }
-  const roles = [];
+  const roles: { user_id: string; role: string }[] = [];
   for (let offset = 0; ; offset += 1000) {
     const { data, error } = await supabaseAdmin.from('user_roles').select('user_id,role').range(offset, offset + 999);
     if (error) throw new Error(error.message);

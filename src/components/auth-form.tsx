@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from '@tanstack/react-router';
 import { z } from 'zod';
 import { ArrowRight, Loader2, Eye, EyeOff } from 'lucide-react';
@@ -13,6 +13,11 @@ export function AuthForm() {
   const [email, setEmail] = useState(''); const [password, setPassword] = useState('');
   const [show, setShow] = useState(false); const [busy, setBusy] = useState(false);
   const [error, setError] = useState(''); const [message, setMessage] = useState('');
+  useEffect(() => {
+    let active = true;
+    void supabase.auth.getUser().then(({data}) => { if (active && data.user) void router.navigate({to:'/painel',replace:true}); });
+    return () => { active = false; };
+  }, [router]);
   async function submit(e: React.FormEvent) {
     e.preventDefault(); setError(''); setMessage('');
     const check = z.object({ email:z.string().trim().email('Informe um email válido').max(255), password:mode === 'forgot' ? z.string() : z.string().min(6,'A senha deve ter pelo menos 6 caracteres').max(128) }).safeParse({ email,password });
