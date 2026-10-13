@@ -77,6 +77,7 @@ export type Database = {
     }
     Functions: {
       has_app_role: { Args: { required_role: string }; Returns: boolean }
+      import_clientes: { Args: { rows_data: Json }; Returns: Json }
     }
     Enums: {
       [_ in never]: never
