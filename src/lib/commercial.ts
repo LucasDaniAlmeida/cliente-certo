@@ -10,9 +10,15 @@ export const clientSchema = z.object({
 });
 export const updateSchema = z.object({
   id: z.number().int().positive(), status: z.enum(statuses), obs: z.string().max(10000),
+  nome: z.string().max(500).optional(),
+  nome_fantasia: z.string().max(500).optional(),
+  cpf: z.string().max(100).optional(),
+  cnpj: z.string().max(100).optional(),
+  telefone: z.array(z.string().max(100)).max(30).optional(),
   data_ultimo_contato: z.string().nullable().refine(v => !v || /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?$/.test(v), 'Data de contato inválida'),
   data_agendamento: z.string().nullable().refine(v => !v || /^\d{4}-\d{2}-\d{2}$/.test(v), 'Data de agendamento inválida'),
 }).refine(v => v.status !== 'Agendamento' || !!v.data_agendamento, { message: 'Preencha a data do agendamento', path: ['data_agendamento'] });
+export const deleteClientSchema = z.object({ id: z.number().int().positive() });
 export function head(title: string, description: string) {
   return { meta: [{ title: `${title} · Elo Comercial` }, { name: 'description', content: description }, { property: 'og:title', content: `${title} · Elo Comercial` }, { property: 'og:description', content: description }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' }] };
 }

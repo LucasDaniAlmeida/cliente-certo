@@ -20,4 +20,8 @@ describe('Commercial validation', () => {
     expect(updateSchema.safeParse({ ...update, obs:'x'.repeat(10001) }).success).toBe(false);
     expect(updateSchema.safeParse({ ...update, id:-1 }).success).toBe(false);
   });
+  it('accepts editable customer details', () => {
+    const result = updateSchema.safeParse({ ...update, nome:'Ana Silva', nome_fantasia:'Ana Serviços', cpf:'001.002.003-04', cnpj:'', telefone:['(63) 99999-1234'] });
+    expect(result.success).toBe(true);
+  });
 });

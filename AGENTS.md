@@ -13,3 +13,4 @@
 - Only administrative account listing and role assignment use the server-only admin client after verifying the caller's admin role.
 - Customer imports use a serialized database function for atomic duplicate checks across concurrent imports; Excel parsing and column mapping stay in the browser.
 - Protected pages live under the pathless authenticated layout; public sign-in and recovery pages remain at top level to support email links.
+- Customer edits and deletions use authenticated, RLS-protected server functions so UI controls never determine authorization.
