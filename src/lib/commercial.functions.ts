@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start';
 import { z } from 'zod';
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware';
-import { clientSchema, updateSchema } from './commercial';
+import { clientSchema, deleteClientSchema, updateSchema } from './commercial';
 
 export const getAccess = createServerFn({ method: 'GET' }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { data, error } = await context.supabase.from('user_roles').select('role').eq('user_id', context.userId);
@@ -25,10 +25,25 @@ export const listClients = createServerFn({ method: 'GET' }).middleware([require
 
 export const updateClient = createServerFn({ method: 'POST' }).middleware([requireSupabaseAuth])
   .inputValidator(input => updateSchema.parse(input)).handler(async ({ data, context }) => {
-    const { id, ...values } = data;
+    const { id, nome, nome_fantasia, cpf, cnpj, telefone, ...tracking } = data;
+    const values = {
+      ...tracking,
+      ...(nome === undefined ? {} : { nome }),
+      ...(nome_fantasia === undefined ? {} : { nome_fantasia }),
+      ...(cpf === undefined ? {} : { cpf }),
+      ...(cnpj === undefined ? {} : { cnpj }),
+      ...(telefone === undefined ? {} : { telefone }),
+    };
     const { data: saved, error } = await context.supabase.from('clientes').update(values).eq('id', id).select('*').single();
     if (error) throw new Error(error.message);
     return saved;
+  });
+
+export const deleteClient = createServerFn({ method: 'POST' }).middleware([requireSupabaseAuth])
+  .inputValidator(input => deleteClientSchema.parse(input)).handler(async ({ data, context }) => {
+    const { error } = await context.supabase.from('clientes').delete().eq('id', data.id);
+    if (error) throw new Error(error.message);
+    return { success: true };
   });
 
 export const importClients = createServerFn({ method: 'POST' }).middleware([requireSupabaseAuth])
