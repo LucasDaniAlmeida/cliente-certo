@@ -25,7 +25,15 @@ export const listClients = createServerFn({ method: 'GET' }).middleware([require
 
 export const updateClient = createServerFn({ method: 'POST' }).middleware([requireSupabaseAuth])
   .inputValidator(input => updateSchema.parse(input)).handler(async ({ data, context }) => {
-    const { id, ...values } = data;
+    const { id, nome, nome_fantasia, cpf, cnpj, telefone, ...tracking } = data;
+    const values = {
+      ...tracking,
+      ...(nome === undefined ? {} : { nome }),
+      ...(nome_fantasia === undefined ? {} : { nome_fantasia }),
+      ...(cpf === undefined ? {} : { cpf }),
+      ...(cnpj === undefined ? {} : { cnpj }),
+      ...(telefone === undefined ? {} : { telefone }),
+    };
     const { data: saved, error } = await context.supabase.from('clientes').update(values).eq('id', id).select('*').single();
     if (error) throw new Error(error.message);
     return saved;
