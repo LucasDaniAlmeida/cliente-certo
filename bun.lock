@@ -5,6 +5,7 @@
     "": {
       "name": "tanstack_start_ts",
       "dependencies": {
+        "@ai-sdk/google": "3.0.132",
         "@copilotkit/react-core": "1.79.0",
         "@copilotkit/react-ui": "1.79.0",
         "@copilotkit/runtime": "1.79.0",
