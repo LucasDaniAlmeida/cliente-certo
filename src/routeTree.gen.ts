@@ -18,6 +18,7 @@ import { Route as AuthenticatedClientesRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedImportacaoRouteImport } from './routes/_authenticated/importacao'
 import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated/painel'
 import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticated/usuarios'
+import { Route as ApiCopilotkitRouteImport } from './routes/api/copilotkit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -63,6 +64,11 @@ const AuthenticatedUsuariosRoute = AuthenticatedUsuariosRouteImport.update({
   path: '/usuarios',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiCopilotkitRoute = ApiCopilotkitRouteImport.update({
+  id: '/api/copilotkit',
+  path: '/api/copilotkit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/importacao': typeof AuthenticatedImportacaoRoute
   '/painel': typeof AuthenticatedPainelRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
+  '/api/copilotkit': typeof ApiCopilotkitRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/importacao': typeof AuthenticatedImportacaoRoute
   '/painel': typeof AuthenticatedPainelRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
+  '/api/copilotkit': typeof ApiCopilotkitRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/_authenticated/importacao': typeof AuthenticatedImportacaoRoute
   '/_authenticated/painel': typeof AuthenticatedPainelRoute
   '/_authenticated/usuarios': typeof AuthenticatedUsuariosRoute
+  '/api/copilotkit': typeof ApiCopilotkitRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
     | '/importacao'
     | '/painel'
     | '/usuarios'
+    | '/api/copilotkit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/importacao'
     | '/painel'
     | '/usuarios'
+    | '/api/copilotkit'
   id:
     | '__root__'
     | '/'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/_authenticated/importacao'
     | '/_authenticated/painel'
     | '/_authenticated/usuarios'
+    | '/api/copilotkit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -136,6 +148,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   EsperaRoute: typeof EsperaRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiCopilotkitRoute: typeof ApiCopilotkitRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -203,6 +216,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUsuariosRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/copilotkit': {
+      id: '/api/copilotkit'
+      path: '/api/copilotkit'
+      fullPath: '/api/copilotkit'
+      preLoaderRoute: typeof ApiCopilotkitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -229,6 +249,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   EsperaRoute: EsperaRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ApiCopilotkitRoute: ApiCopilotkitRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
