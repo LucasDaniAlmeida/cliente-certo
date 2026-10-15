@@ -26,7 +26,7 @@ async function handle(request: Request) {
   ]);
   // Gemini via its OpenAI-compatible endpoint
   const gemini = new OpenAI({ apiKey, baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/' });
-  const serviceAdapter = new OpenAIAdapter({ openai: gemini, model: 'gemini-3.8-flash' });
+  const serviceAdapter = new OpenAIAdapter({ openai: gemini, model: 'gemini-2.5-flash' });
   const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({ runtime: new CopilotRuntime(), serviceAdapter, endpoint: '/api/copilotkit' });
   return handleRequest(request as never);
 }
