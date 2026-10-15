@@ -20,14 +20,15 @@ async function handle(request: Request) {
   if (!(await isStaff(request))) return new Response('Não autorizado', { status: 401 });
   const apiKey = process.env['GEMINI_API_KEY'];
   if (!apiKey) return new Response('Assistente não configurado', { status: 500 });
-  const [{ CopilotRuntime, OpenAIAdapter, copilotRuntimeNextJSAppRouterEndpoint }, { default: OpenAI }] = await Promise.all([
+  const [{ CopilotRuntime, ExperimentalEmptyAdapter, copilotRuntimeNextJSAppRouterEndpoint }, { BuiltInAgent }, { createGoogleGenerativeAI }] = await Promise.all([
     import('@copilotkit/runtime'),
-    import('openai'),
+    import('@copilotkit/runtime/v2'),
+    import('@ai-sdk/google'),
   ]);
-  // Gemini via its OpenAI-compatible endpoint
-  const gemini = new OpenAI({ apiKey, baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/' });
-  const serviceAdapter = new OpenAIAdapter({ openai: gemini, model: 'gemini-flash-latest' });
-  const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({ runtime: new CopilotRuntime(), serviceAdapter, endpoint: '/api/copilotkit' });
+  // Native Gemini provider (the OpenAI adapter uses /responses, which Gemini doesn't support)
+  const model = createGoogleGenerativeAI({ apiKey })('gemini-3.8-flash');
+  const runtime = new CopilotRuntime({ agents: { default: new BuiltInAgent({ model }) } as never });
+  const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({ runtime, serviceAdapter: new ExperimentalEmptyAdapter(), endpoint: '/api/copilotkit' });
   return handleRequest(request as never);
 }
 
