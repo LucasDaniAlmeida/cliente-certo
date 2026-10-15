@@ -42,7 +42,7 @@ function CopilotBrain() {
       { name: 'data_ultimo_contato', type: 'string', description: 'AAAA-MM-DDTHH:MM', required: false },
       { name: 'data_agendamento', type: 'string', description: 'AAAA-MM-DD', required: false },
     ],
-    handler: async (args: { id: number; status?: string; obs?: string; data_ultimo_contato?: string; data_agendamento?: string }) => {
+    handler: async (args) => {
       const c = (qc.getQueryData<Client[]>(['clients']) ?? data).find(x => x.id === args.id);
       if (!c) return 'Cliente não encontrado.';
       const status = (args.status ?? statuses[statusKey(c.status)]) as typeof statuses[number];
