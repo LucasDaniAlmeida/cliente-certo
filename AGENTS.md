@@ -14,3 +14,4 @@
 - Customer imports use a serialized database function for atomic duplicate checks across concurrent imports; Excel parsing and column mapping stay in the browser.
 - Protected pages live under the pathless authenticated layout; public sign-in and recovery pages remain at top level to support email links.
 - Customer edits and deletions use authenticated, RLS-protected server functions so UI controls never determine authorization.
+- Rotas /api/copilotkit verify the Supabase token and admin/operador role before running the CopilotKit runtime; copilot actions run in the browser through existing authenticated server functions so RLS still applies.
