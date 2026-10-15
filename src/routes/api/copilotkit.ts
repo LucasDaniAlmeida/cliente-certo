@@ -18,13 +18,15 @@ async function isStaff(request: Request) {
 
 async function handle(request: Request) {
   if (!(await isStaff(request))) return new Response('Não autorizado', { status: 401 });
-  const apiKey = process.env['OPENAI_API_KEY'];
+  const apiKey = process.env['GEMINI_API_KEY'];
   if (!apiKey) return new Response('Assistente não configurado', { status: 500 });
   const [{ CopilotRuntime, OpenAIAdapter, copilotRuntimeNextJSAppRouterEndpoint }, { default: OpenAI }] = await Promise.all([
     import('@copilotkit/runtime'),
     import('openai'),
   ]);
-  const serviceAdapter = new OpenAIAdapter({ openai: new OpenAI({ apiKey }), model: 'gpt-4o-mini' });
+  // Gemini via its OpenAI-compatible endpoint
+  const gemini = new OpenAI({ apiKey, baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/' });
+  const serviceAdapter = new OpenAIAdapter({ openai: gemini, model: 'gemini-3.8-flash' });
   const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({ runtime: new CopilotRuntime(), serviceAdapter, endpoint: '/api/copilotkit' });
   return handleRequest(request as never);
 }
