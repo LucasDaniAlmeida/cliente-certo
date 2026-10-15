@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { getAccess } from '@/lib/commercial.functions';
 import type { ReactNode } from 'react';
+import { CommercialCopilot } from '@/components/commercial-copilot';
 
 export function Brand() { return <div className="brand"><span className="brand-mark"><ArrowUpRight size={23}/></span><span>elo<span className="text-primary">.</span><small>GESTÃO COMERCIAL</small></span></div>; }
 export function CommercialShell({ children }: { children: ReactNode }) {
@@ -22,5 +23,5 @@ export function CommercialShell({ children }: { children: ReactNode }) {
     <Link className={`nav-item ${pathname === '/importacao' ? 'active' : ''}`} to="/importacao"><FileUp size={18}/>Importação</Link>
     {access.data?.roles.includes('admin') && <Link className={`nav-item ${pathname === '/usuarios' ? 'active' : ''}`} to="/usuarios"><ShieldCheck size={18}/>Usuários</Link>}
   </nav><div className="sidebar-bottom"><p className="flex items-center gap-2"><span className="dot text-primary"/> {access.data?.roles.includes('admin') ? 'Administrador' : 'Operador'}</p><Button variant="ghost" onClick={logout} className="w-full justify-start"><LogOut/>Sair da conta</Button></div></aside>
-  <div className="workspace"><header className="topbar"><span className="flex items-center gap-2">Workspace <ChevronRight size={13}/><span className="text-foreground">{label}</span></span><div className="topbar-right"><span className="hidden sm:inline">{new Date().toLocaleDateString('pt-BR', { day:'numeric', month:'long', year:'numeric' })}</span><Button variant="ghost" size="icon" title="Sair da conta" aria-label="Sair da conta" onClick={logout}><LogOut size={17}/></Button><span className="user-avatar">{access.data?.roles.includes('admin') ? 'AD' : 'OP'}</span></div></header><main className="page-content">{children}</main></div></div>;
+  <div className="workspace"><header className="topbar"><span className="flex items-center gap-2">Workspace <ChevronRight size={13}/><span className="text-foreground">{label}</span></span><div className="topbar-right"><span className="hidden sm:inline">{new Date().toLocaleDateString('pt-BR', { day:'numeric', month:'long', year:'numeric' })}</span><Button variant="ghost" size="icon" title="Sair da conta" aria-label="Sair da conta" onClick={logout}><LogOut size={17}/></Button><span className="user-avatar">{access.data?.roles.includes('admin') ? 'AD' : 'OP'}</span></div></header><CommercialCopilot><main className="page-content">{children}</main></CommercialCopilot></div></div>;
 }
